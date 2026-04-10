@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: card-fraud-detection-batch
+  datasource:
+    url: jdbc:postgresql://localhost:5432/card-fraud-detection-batch
+    username: postgres
+    password: postgres
+  batch:
+    jdbc:
+      initialize-schema: always
+  flyway:
+    baseline-on-migrate: false
+    locations: classpath:db/migration
+    url: jdbc:postgresql://localhost:5432/card-fraud-detection-batch
+    user: postgres
+    password: postgres
+    clean-disabled: true
+    out-of-order: false
+  threads:
+    virtual:
+      enabled: true
+
+batch:
+  partition-count: 4
+  chunk-size: 1000
+  input-file: classpath:data/transactions.csv
+  cardholders-file: classpath:data/cardholders.csv
+  flagged-output-file: output/flagged_transactions.csv
+
+logging:
+  level:
+    com.example.batch: INFO
+    org.springframework.batch: INFO
